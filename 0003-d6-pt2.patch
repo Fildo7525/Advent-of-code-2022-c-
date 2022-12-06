@@ -1,0 +1,43 @@
+From b1333942cb0e29c42219773321a1c26338398525 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Tue, 6 Dec 2022 07:15:35 +0100
+Subject: [PATCH 3/3] pt2
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ main.cpp | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/main.cpp b/main.cpp
+index 1c03fc8..d78fefe 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -8,21 +8,16 @@ int main(int argc, char *argv[])
+ 	std::string line;
+ 	std::getline(input, line);
+ 	auto start = 0;
+-	auto end = 4;
++	auto end = 14;
+ 	do
+ 	{
+-		auto tmp = line.substr(start, 4);
++		auto tmp = line.substr(start, 14);
+ 		// std::cout << tmp << std::endl;
+ 		std::sort(tmp.begin(), tmp.end());
+ 		// std::cout << tmp << std::endl;
+-		for (size_t i = 0; i < tmp.size()-1; i++) {
+-			if (tmp[i] == tmp[i+1]) {
+-				tmp.erase(i+1);
+-				i--;
+-			}
+-		}
++		tmp.erase(std::unique(tmp.begin(), tmp.end()), tmp.end());
+ 		// std::cout << tmp << std::endl << std::endl;
+-		if (tmp.size() == 4) {
++		if (tmp.size() == 14) {
+ 			std::cout << "ANS: " << end << std::endl;
+ 			return 0;
+ 		}
+-- 
+2.34.1
+
