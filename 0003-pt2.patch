@@ -1,0 +1,104 @@
+From a057b7e83d2e6db656e9b256cb1d9f37379621f4 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Fri, 2 Dec 2022 18:59:42 +0100
+Subject: [PATCH 3/3] pt2
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ main.cpp | 53 +++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 35 insertions(+), 18 deletions(-)
+
+diff --git a/main.cpp b/main.cpp
+index 5dfb3e7..8d45aaa 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -9,9 +9,9 @@ enum class rps {
+ 	SCISORS,
+ };
+ 
+-int deciferWin(rps other, rps me);
++rps deciferMySign(rps other, int outcome);
+ rps getHis(char c);
+-rps getMe(char c);
++int getOutcome(char c);
+ int getPointsFromSign(rps sin);
+ 
+ int main(int argc, char *argv[])
+@@ -20,25 +20,42 @@ int main(int argc, char *argv[])
+ 	std::string line;
+ 	int totalScore = 0;
+ 	while (std::getline(input, line)) {
+-		int win = deciferWin(getHis(line[0]), getMe(line[2]));
+-		totalScore += getPointsFromSign(getMe(line[2])) + win;
++		rps his = getHis(line[0]);
++		rps me = deciferMySign(his, getOutcome(line[2]));
++		// std::cout << "My sign " << int(me) << std::endl;
++		totalScore += getPointsFromSign(me) + getOutcome(line[2]);
+ 	}
+ 	std::cout << "Score: " << totalScore << std::endl;
+ 	return 0;
+ }
+ 
+-int deciferWin(rps other, rps me)
++rps deciferMySign(rps other, int outcome)
+ {
+-	if (other == rps::ROCK && me == rps::PAPER) {
+-		return 6;
+-	} else if (other == rps::PAPER && me == rps::SCISORS) {
+-		return 6;
+-	} else if (other == rps::SCISORS && me == rps::ROCK) {
+-		return 6;
+-	} else if (other == me) {
+-		return 3;
++	if (other == rps::ROCK) {
++		if (outcome == 0) {
++			return rps::SCISORS;
++		} else if (outcome == 3) {
++			return rps::ROCK;
++		} else {
++			return rps::PAPER;
++		}
++	} else if (other == rps::PAPER){
++		if (outcome == 0) {
++			return rps::ROCK;
++		} else if (outcome == 3) {
++			return rps::PAPER;
++		} else {
++			return rps::SCISORS;
++		}
++	} else {
++		if (outcome == 0) {
++			return rps::PAPER;
++		} else if (outcome == 3) {
++			return rps::SCISORS;
++		} else {
++			return rps::ROCK;
++		}
+ 	}
+-	return 0;
+ }
+ 
+ rps getHis(char c)
+@@ -53,15 +70,15 @@ rps getHis(char c)
+ 	}
+ }
+ 
+-rps getMe(char c)
++int getOutcome(char c)
+ {
+ 	switch (c) {
+ 		case 'X':
+-			return rps::ROCK;
++			return 0;
+ 		case 'Y':
+-			return rps::PAPER;
++			return 3;
+ 		case 'Z':
+-			return rps::SCISORS;
++			return 6;
+ 	}
+ }
+ 
+-- 
+2.34.1
+

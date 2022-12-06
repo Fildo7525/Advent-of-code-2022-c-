@@ -1,0 +1,126 @@
+From a6bfc84ef485df6094288b33fbf391de6a394f65 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Fri, 2 Dec 2022 18:16:54 +0100
+Subject: [PATCH 1/3] Initial commit
+
+---
+ CMakeLists.txt        | 26 ++++++++++++++++++++++++++
+ compile_commands.json | 12 ++++++++++++
+ main.cpp              |  8 ++++++++
+ src/CMakeLists.txt    |  7 +++++++
+ src/day2.cpp          |  2 ++
+ src/day2.h            | 11 +++++++++++
+ 6 files changed, 66 insertions(+)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 compile_commands.json
+ create mode 100644 main.cpp
+ create mode 100644 src/CMakeLists.txt
+ create mode 100644 src/day2.cpp
+ create mode 100644 src/day2.h
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..93b1d2d
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,26 @@
++cmake_minimum_required(VERSION 3.22.1)
++project(day2 VERSION 3.22.1)
++
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++
++set(SOURCES
++	main.cpp
++)
++set(HEADERS
++)
++
++add_subdirectory(src)
++
++add_executable(${PROJECT_NAME}
++	${SOURCES}
++	${HEADERS}
++)
++
++target_link_libraries(
++	${PROJECT_NAME}
++PUBLIC
++	lib
++)
++
+diff --git a/compile_commands.json b/compile_commands.json
+new file mode 100644
+index 0000000..73fb10a
+--- /dev/null
++++ b/compile_commands.json
+@@ -0,0 +1,12 @@
++[
++{
++  "directory": "/home/fildo7525/Desktop/Cpp/AOC22/day2/build",
++  "command": "/usr/bin/c++  -I/home/fildo7525/Desktop/Cpp/AOC22/day2/src -std=gnu++17 -o CMakeFiles/day2.dir/main.cpp.o -c /home/fildo7525/Desktop/Cpp/AOC22/day2/main.cpp",
++  "file": "/home/fildo7525/Desktop/Cpp/AOC22/day2/main.cpp"
++},
++{
++  "directory": "/home/fildo7525/Desktop/Cpp/AOC22/day2/build/src",
++  "command": "/usr/bin/c++  -I/home/fildo7525/Desktop/Cpp/AOC22/day2/src -std=gnu++17 -o CMakeFiles/lib.dir/day2.cpp.o -c /home/fildo7525/Desktop/Cpp/AOC22/day2/src/day2.cpp",
++  "file": "/home/fildo7525/Desktop/Cpp/AOC22/day2/src/day2.cpp"
++}
++]
+\ No newline at end of file
+diff --git a/main.cpp b/main.cpp
+new file mode 100644
+index 0000000..9021dff
+--- /dev/null
++++ b/main.cpp
+@@ -0,0 +1,8 @@
++#include "day2.h"
++
++int main(int argc, char *argv[])
++{
++	fstream input("../input", std::ios::in);	std::cout << "Hello World!\n";
++	return 0;
++}
++
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..1102fbd
+--- /dev/null
++++ b/src/CMakeLists.txt
+@@ -0,0 +1,7 @@
++add_library(lib
++	day2.cpp
++	day2.h
++)
++
++target_include_directories(lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
++
+diff --git a/src/day2.cpp b/src/day2.cpp
+new file mode 100644
+index 0000000..d634f72
+--- /dev/null
++++ b/src/day2.cpp
+@@ -0,0 +1,2 @@
++#include "day2.h"
++
+diff --git a/src/day2.h b/src/day2.h
+new file mode 100644
+index 0000000..b57f729
+--- /dev/null
++++ b/src/day2.h
+@@ -0,0 +1,11 @@
++#pragma once
++
++#include <iostream>
++
++class day2
++{
++public:
++	day2() = default;
++
++};
++
+-- 
+2.34.1
+
