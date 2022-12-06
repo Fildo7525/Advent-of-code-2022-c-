@@ -1,0 +1,159 @@
+From ef3a2eeb46d6082b380ce68d338ed93cd18eadb0 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Fri, 2 Dec 2022 18:59:54 +0100
+Subject: [PATCH 1/3] Initial commit
+
+---
+ .gitignore            |  5 +++++
+ CMakeLists.txt        | 26 ++++++++++++++++++++++++++
+ compile_commands.json | 12 ++++++++++++
+ input                 |  0
+ main.cpp              | 13 +++++++++++++
+ src/CMakeLists.txt    |  7 +++++++
+ src/day3.cpp          |  2 ++
+ src/day3.h            | 16 ++++++++++++++++
+ test                  |  0
+ 9 files changed, 81 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 CMakeLists.txt
+ create mode 100644 compile_commands.json
+ create mode 100644 input
+ create mode 100644 main.cpp
+ create mode 100644 src/CMakeLists.txt
+ create mode 100644 src/day3.cpp
+ create mode 100644 src/day3.h
+ create mode 100644 test
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..9ef33d6
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,5 @@
++build/
++build.sh
++compile.sh
++.cache
++
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..0ba730f
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,26 @@
++cmake_minimum_required(VERSION 3.22.1)
++project(day3 VERSION 3.22.1)
++
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++
++set(SOURCES
++	main.cpp
++)
++set(HEADERS
++)
++
++add_subdirectory(src)
++
++add_executable(${PROJECT_NAME}
++	${SOURCES}
++	${HEADERS}
++)
++
++target_link_libraries(
++	${PROJECT_NAME}
++PUBLIC
++	lib
++)
++
+diff --git a/compile_commands.json b/compile_commands.json
+new file mode 100644
+index 0000000..d476891
+--- /dev/null
++++ b/compile_commands.json
+@@ -0,0 +1,12 @@
++[
++{
++  "directory": "/home/fildo7525/Desktop/Cpp/AOC22/day3/build",
++  "command": "/usr/bin/c++  -I/home/fildo7525/Desktop/Cpp/AOC22/day3/src -std=gnu++17 -o CMakeFiles/day3.dir/main.cpp.o -c /home/fildo7525/Desktop/Cpp/AOC22/day3/main.cpp",
++  "file": "/home/fildo7525/Desktop/Cpp/AOC22/day3/main.cpp"
++},
++{
++  "directory": "/home/fildo7525/Desktop/Cpp/AOC22/day3/build/src",
++  "command": "/usr/bin/c++  -I/home/fildo7525/Desktop/Cpp/AOC22/day3/src -std=gnu++17 -o CMakeFiles/lib.dir/day3.cpp.o -c /home/fildo7525/Desktop/Cpp/AOC22/day3/src/day3.cpp",
++  "file": "/home/fildo7525/Desktop/Cpp/AOC22/day3/src/day3.cpp"
++}
++]
+\ No newline at end of file
+diff --git a/input b/input
+new file mode 100644
+index 0000000..e69de29
+diff --git a/main.cpp b/main.cpp
+new file mode 100644
+index 0000000..a47d168
+--- /dev/null
++++ b/main.cpp
+@@ -0,0 +1,13 @@
++#include "day3.h"
++#include <string>
++
++int main(int argc, char *argv[])
++{
++	std::fstream input("../input", std::ios::in);
++	std::string line;
++	while (std::getline(input, line)) {
++		
++	}
++	return 0;
++}
++
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..0df3006
+--- /dev/null
++++ b/src/CMakeLists.txt
+@@ -0,0 +1,7 @@
++add_library(lib
++	day3.cpp
++	day3.h
++)
++
++target_include_directories(lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
++
+diff --git a/src/day3.cpp b/src/day3.cpp
+new file mode 100644
+index 0000000..335924e
+--- /dev/null
++++ b/src/day3.cpp
+@@ -0,0 +1,2 @@
++#include "day3.h"
++
+diff --git a/src/day3.h b/src/day3.h
+new file mode 100644
+index 0000000..1a828e4
+--- /dev/null
++++ b/src/day3.h
+@@ -0,0 +1,16 @@
++#pragma once
++
++#include <iostream>
++#include <vector>
++#include <fstream>
++#include <map>
++#include <algorithm>
++#include <numeric>
++
++class day3
++{
++public:
++	day3() = default;
++
++};
++
+diff --git a/test b/test
+new file mode 100644
+index 0000000..e69de29
+-- 
+2.34.1
+

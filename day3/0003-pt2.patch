@@ -1,0 +1,66 @@
+From ef27fd370cfd1f08ef0fc4b5e17435eb67b1666c Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Sat, 3 Dec 2022 09:39:30 +0100
+Subject: [PATCH 3/3] pt2
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ main.cpp | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
+
+diff --git a/main.cpp b/main.cpp
+index 05d7232..bf11a78 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -4,20 +4,27 @@
+ #include <string>
+ 
+ void rearange(std::string &s);
+-char findCommon(const std::string &lhs, const std::string &rhs);
++char findCommon(const std::string &lhs, const std::string &mhs, const std::string &rhs);
+ int getWeight(char c);
+ 
+ int main(int argc, char *argv[])
+ {
+ 	std::fstream input("../input", std::ios::in);
+-	std::string line;
++	std::string firstElf;
++	std::string secondElf;
++	std::string thirdElf;
+ 	int totalGain = 0;
+-	while (std::getline(input, line)) {
+-		std::string firstCompartment = line.substr(0, line.size()/2);
+-		std::string secondCompartment = line.substr(line.size()/2);
+-		rearange(firstCompartment);
+-		rearange(secondCompartment);
+-		char c = findCommon(firstCompartment, secondCompartment);
++
++	while (!input.eof()) {
++		std::getline(input, firstElf);
++		std::getline(input, secondElf);
++		std::getline(input, thirdElf);
++
++		rearange(firstElf);
++		rearange(secondElf);
++		rearange(thirdElf);
++
++		char c = findCommon(firstElf, secondElf, thirdElf);
+ 		// std::cout << "Char: " << c << " gain: " << getWeight(c) << std::endl;
+ 		totalGain += getWeight(c);
+ 	}
+@@ -32,10 +39,10 @@ void rearange(std::string &s)
+ 	s.erase(end-s.begin());
+ }
+ 
+-char findCommon(const std::string &lhs, const std::string &rhs)
++char findCommon(const std::string &lhs, const std::string &mhs, const std::string &rhs)
+ {
+ 	for(char var : lhs) {
+-		if (rhs.find(var) != std::string::npos) {
++		if (rhs.find(var) != std::string::npos && mhs.find(var) != std::string::npos) {
+ 			return var;
+ 		}
+ 	}
+-- 
+2.34.1
+
