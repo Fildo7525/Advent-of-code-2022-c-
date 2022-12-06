@@ -1,0 +1,7 @@
+build/
+build.sh
+compile.sh
+.cache
+include
+log
+
