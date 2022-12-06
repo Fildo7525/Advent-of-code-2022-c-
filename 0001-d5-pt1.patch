@@ -1,0 +1,739 @@
+From 75a265dca935980394149fa4df753a3609a20aa2 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Mon, 5 Dec 2022 09:31:09 +0100
+Subject: [PATCH 1/3] pt1
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ .gitignore |   5 +
+ input      | 513 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ main.cpp   | 147 ++++++++++++++-
+ src/day5.h |   2 +
+ test       |   9 +
+ 5 files changed, 674 insertions(+), 2 deletions(-)
+ create mode 100644 .gitignore
+ create mode 100644 input
+ create mode 100644 test
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..9ef33d6
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,5 @@
++build/
++build.sh
++compile.sh
++.cache
++
+diff --git a/input b/input
+new file mode 100644
+index 0000000..a22feef
+--- /dev/null
++++ b/input
+@@ -0,0 +1,513 @@
++[N]     [Q]         [N]            
++[R]     [F] [Q]     [G] [M]        
++[J]     [Z] [T]     [R] [H] [J]    
++[T] [H] [G] [R]     [B] [N] [T]    
++[Z] [J] [J] [G] [F] [Z] [S] [M]    
++[B] [N] [N] [N] [Q] [W] [L] [Q] [S]
++[D] [S] [R] [V] [T] [C] [C] [N] [G]
++[F] [R] [C] [F] [L] [Q] [F] [D] [P]
++ 1   2   3   4   5   6   7   8   9 
++
++move 3 from 9 to 4
++move 2 from 5 to 2
++move 8 from 1 to 9
++move 4 from 7 to 1
++move 5 from 3 to 8
++move 3 from 3 to 7
++move 11 from 8 to 3
++move 7 from 3 to 6
++move 2 from 5 to 9
++move 3 from 1 to 6
++move 6 from 2 to 4
++move 6 from 7 to 5
++move 1 from 6 to 1
++move 1 from 9 to 4
++move 16 from 4 to 9
++move 2 from 1 to 2
++move 1 from 4 to 6
++move 1 from 3 to 7
++move 2 from 2 to 4
++move 1 from 7 to 9
++move 22 from 9 to 8
++move 1 from 6 to 3
++move 18 from 8 to 5
++move 3 from 8 to 2
++move 3 from 2 to 9
++move 13 from 6 to 7
++move 1 from 6 to 7
++move 4 from 3 to 6
++move 2 from 6 to 3
++move 2 from 3 to 8
++move 3 from 7 to 8
++move 14 from 5 to 2
++move 3 from 2 to 5
++move 2 from 8 to 4
++move 4 from 8 to 6
++move 4 from 6 to 4
++move 11 from 5 to 2
++move 3 from 9 to 2
++move 7 from 2 to 3
++move 11 from 7 to 2
++move 1 from 5 to 7
++move 5 from 6 to 8
++move 30 from 2 to 7
++move 23 from 7 to 2
++move 4 from 3 to 4
++move 3 from 9 to 6
++move 4 from 8 to 2
++move 1 from 8 to 2
++move 2 from 7 to 9
++move 4 from 2 to 3
++move 1 from 5 to 9
++move 6 from 4 to 7
++move 5 from 3 to 6
++move 1 from 3 to 6
++move 1 from 9 to 2
++move 16 from 2 to 5
++move 7 from 7 to 6
++move 9 from 2 to 1
++move 2 from 1 to 4
++move 8 from 5 to 3
++move 5 from 7 to 4
++move 1 from 9 to 8
++move 9 from 3 to 6
++move 25 from 6 to 8
++move 2 from 9 to 5
++move 3 from 4 to 2
++move 7 from 4 to 1
++move 1 from 8 to 7
++move 6 from 5 to 2
++move 11 from 8 to 5
++move 1 from 7 to 9
++move 10 from 1 to 2
++move 6 from 5 to 1
++move 1 from 4 to 2
++move 13 from 8 to 1
++move 17 from 1 to 2
++move 5 from 1 to 9
++move 1 from 8 to 4
++move 1 from 1 to 3
++move 1 from 3 to 6
++move 1 from 9 to 3
++move 2 from 4 to 5
++move 1 from 4 to 8
++move 1 from 9 to 1
++move 8 from 5 to 7
++move 1 from 8 to 1
++move 7 from 7 to 6
++move 2 from 1 to 2
++move 1 from 3 to 6
++move 2 from 5 to 4
++move 8 from 2 to 1
++move 1 from 9 to 7
++move 1 from 5 to 1
++move 2 from 7 to 3
++move 2 from 3 to 7
++move 2 from 7 to 8
++move 2 from 1 to 5
++move 3 from 9 to 2
++move 2 from 8 to 9
++move 1 from 9 to 2
++move 1 from 9 to 8
++move 1 from 8 to 7
++move 6 from 6 to 5
++move 1 from 6 to 2
++move 2 from 4 to 5
++move 2 from 6 to 8
++move 1 from 7 to 1
++move 2 from 8 to 4
++move 11 from 2 to 5
++move 18 from 5 to 6
++move 6 from 2 to 6
++move 10 from 2 to 7
++move 1 from 4 to 3
++move 7 from 2 to 8
++move 7 from 1 to 4
++move 6 from 7 to 8
++move 2 from 7 to 3
++move 8 from 4 to 7
++move 1 from 1 to 3
++move 1 from 2 to 1
++move 4 from 7 to 1
++move 4 from 1 to 3
++move 2 from 3 to 9
++move 2 from 5 to 4
++move 1 from 2 to 1
++move 2 from 1 to 5
++move 1 from 3 to 1
++move 2 from 5 to 2
++move 1 from 2 to 6
++move 5 from 7 to 4
++move 1 from 1 to 2
++move 10 from 8 to 1
++move 2 from 2 to 7
++move 2 from 7 to 1
++move 1 from 7 to 9
++move 1 from 5 to 7
++move 3 from 8 to 7
++move 3 from 3 to 6
++move 3 from 7 to 1
++move 5 from 1 to 4
++move 1 from 7 to 6
++move 22 from 6 to 3
++move 2 from 6 to 2
++move 19 from 3 to 4
++move 15 from 4 to 8
++move 9 from 8 to 4
++move 5 from 6 to 8
++move 2 from 2 to 8
++move 2 from 9 to 4
++move 7 from 1 to 5
++move 1 from 1 to 3
++move 1 from 9 to 7
++move 5 from 8 to 3
++move 4 from 8 to 1
++move 5 from 1 to 5
++move 10 from 4 to 3
++move 3 from 4 to 2
++move 2 from 8 to 3
++move 12 from 4 to 8
++move 1 from 7 to 6
++move 3 from 2 to 9
++move 2 from 4 to 5
++move 5 from 3 to 7
++move 1 from 7 to 2
++move 1 from 1 to 6
++move 1 from 7 to 2
++move 15 from 3 to 8
++move 10 from 5 to 6
++move 3 from 7 to 8
++move 1 from 5 to 8
++move 1 from 2 to 3
++move 7 from 6 to 1
++move 3 from 5 to 3
++move 5 from 3 to 5
++move 3 from 5 to 4
++move 2 from 4 to 9
++move 2 from 3 to 5
++move 14 from 8 to 5
++move 1 from 9 to 1
++move 16 from 5 to 3
++move 16 from 3 to 6
++move 2 from 9 to 8
++move 21 from 6 to 7
++move 2 from 1 to 7
++move 1 from 2 to 7
++move 4 from 1 to 7
++move 1 from 4 to 7
++move 16 from 8 to 5
++move 20 from 7 to 4
++move 1 from 9 to 8
++move 1 from 7 to 4
++move 3 from 8 to 6
++move 1 from 9 to 1
++move 2 from 1 to 4
++move 2 from 5 to 2
++move 5 from 4 to 7
++move 1 from 6 to 9
++move 11 from 7 to 6
++move 2 from 7 to 5
++move 12 from 6 to 2
++move 13 from 2 to 1
++move 1 from 2 to 3
++move 1 from 8 to 4
++move 6 from 4 to 1
++move 1 from 6 to 7
++move 7 from 4 to 9
++move 8 from 9 to 3
++move 2 from 8 to 3
++move 10 from 5 to 4
++move 11 from 1 to 8
++move 1 from 1 to 3
++move 5 from 1 to 8
++move 8 from 5 to 6
++move 13 from 8 to 9
++move 12 from 3 to 5
++move 12 from 5 to 9
++move 1 from 7 to 9
++move 1 from 1 to 2
++move 1 from 1 to 4
++move 3 from 8 to 5
++move 1 from 2 to 5
++move 1 from 4 to 8
++move 5 from 6 to 3
++move 1 from 8 to 4
++move 13 from 4 to 7
++move 3 from 7 to 6
++move 1 from 1 to 4
++move 4 from 4 to 2
++move 1 from 6 to 3
++move 2 from 5 to 9
++move 2 from 5 to 9
++move 1 from 4 to 8
++move 6 from 9 to 4
++move 22 from 9 to 2
++move 8 from 7 to 4
++move 7 from 2 to 1
++move 3 from 3 to 8
++move 2 from 6 to 7
++move 14 from 4 to 2
++move 2 from 6 to 1
++move 1 from 8 to 7
++move 3 from 3 to 9
++move 1 from 8 to 4
++move 3 from 1 to 9
++move 3 from 9 to 3
++move 31 from 2 to 8
++move 8 from 8 to 4
++move 1 from 9 to 1
++move 9 from 4 to 5
++move 7 from 5 to 6
++move 2 from 5 to 1
++move 1 from 2 to 1
++move 1 from 7 to 9
++move 1 from 2 to 9
++move 2 from 6 to 4
++move 4 from 7 to 4
++move 4 from 9 to 8
++move 6 from 4 to 1
++move 1 from 3 to 2
++move 1 from 3 to 6
++move 1 from 9 to 2
++move 2 from 2 to 4
++move 1 from 9 to 1
++move 1 from 3 to 1
++move 17 from 1 to 9
++move 4 from 6 to 2
++move 1 from 9 to 7
++move 4 from 9 to 7
++move 1 from 8 to 4
++move 3 from 7 to 6
++move 1 from 4 to 9
++move 10 from 8 to 5
++move 6 from 6 to 5
++move 1 from 7 to 2
++move 1 from 1 to 4
++move 1 from 4 to 5
++move 9 from 8 to 3
++move 4 from 3 to 9
++move 1 from 4 to 6
++move 1 from 6 to 5
++move 1 from 4 to 8
++move 2 from 3 to 8
++move 1 from 3 to 8
++move 3 from 8 to 9
++move 5 from 2 to 9
++move 1 from 7 to 9
++move 5 from 8 to 7
++move 3 from 8 to 4
++move 2 from 8 to 5
++move 24 from 9 to 7
++move 1 from 3 to 5
++move 2 from 9 to 4
++move 22 from 7 to 9
++move 1 from 3 to 4
++move 6 from 4 to 6
++move 4 from 6 to 7
++move 10 from 5 to 3
++move 8 from 3 to 5
++move 2 from 3 to 4
++move 2 from 4 to 6
++move 10 from 7 to 3
++move 21 from 9 to 1
++move 2 from 3 to 4
++move 4 from 3 to 8
++move 2 from 4 to 8
++move 1 from 7 to 8
++move 4 from 6 to 8
++move 3 from 5 to 4
++move 8 from 8 to 2
++move 18 from 1 to 6
++move 3 from 4 to 1
++move 1 from 2 to 8
++move 5 from 1 to 8
++move 3 from 3 to 6
++move 3 from 2 to 9
++move 3 from 8 to 1
++move 11 from 5 to 2
++move 3 from 8 to 7
++move 10 from 2 to 9
++move 1 from 7 to 9
++move 3 from 8 to 1
++move 2 from 7 to 8
++move 6 from 9 to 5
++move 4 from 2 to 8
++move 8 from 5 to 8
++move 1 from 3 to 7
++move 2 from 5 to 6
++move 3 from 1 to 6
++move 2 from 1 to 6
++move 4 from 9 to 8
++move 4 from 9 to 8
++move 1 from 9 to 4
++move 9 from 6 to 9
++move 16 from 6 to 9
++move 1 from 4 to 7
++move 1 from 2 to 9
++move 5 from 8 to 5
++move 4 from 5 to 1
++move 6 from 1 to 7
++move 12 from 8 to 4
++move 5 from 8 to 1
++move 6 from 9 to 3
++move 1 from 1 to 6
++move 2 from 5 to 8
++move 12 from 4 to 7
++move 2 from 8 to 4
++move 1 from 4 to 8
++move 1 from 7 to 6
++move 1 from 4 to 6
++move 14 from 7 to 1
++move 3 from 3 to 2
++move 7 from 9 to 7
++move 3 from 3 to 5
++move 15 from 1 to 2
++move 2 from 5 to 9
++move 1 from 8 to 9
++move 16 from 9 to 1
++move 1 from 5 to 9
++move 5 from 6 to 2
++move 12 from 7 to 2
++move 20 from 2 to 6
++move 10 from 2 to 6
++move 11 from 1 to 7
++move 2 from 7 to 4
++move 2 from 2 to 5
++move 1 from 2 to 3
++move 2 from 5 to 6
++move 1 from 9 to 5
++move 1 from 5 to 9
++move 25 from 6 to 7
++move 25 from 7 to 6
++move 1 from 3 to 1
++move 1 from 2 to 5
++move 1 from 4 to 3
++move 33 from 6 to 3
++move 1 from 9 to 5
++move 2 from 3 to 5
++move 28 from 3 to 9
++move 5 from 1 to 9
++move 4 from 1 to 8
++move 2 from 3 to 2
++move 2 from 8 to 1
++move 1 from 4 to 6
++move 3 from 5 to 3
++move 1 from 2 to 4
++move 2 from 2 to 8
++move 1 from 6 to 5
++move 30 from 9 to 2
++move 7 from 2 to 6
++move 1 from 1 to 3
++move 1 from 1 to 7
++move 1 from 5 to 6
++move 1 from 5 to 4
++move 5 from 7 to 4
++move 4 from 7 to 3
++move 1 from 3 to 7
++move 3 from 8 to 7
++move 8 from 3 to 1
++move 3 from 1 to 7
++move 4 from 1 to 4
++move 3 from 9 to 8
++move 8 from 6 to 2
++move 18 from 2 to 6
++move 6 from 7 to 2
++move 1 from 1 to 7
++move 3 from 4 to 7
++move 5 from 4 to 8
++move 2 from 8 to 7
++move 7 from 2 to 5
++move 5 from 2 to 7
++move 10 from 7 to 9
++move 5 from 5 to 9
++move 1 from 3 to 9
++move 5 from 2 to 6
++move 3 from 7 to 9
++move 2 from 5 to 6
++move 2 from 2 to 9
++move 2 from 8 to 7
++move 1 from 4 to 5
++move 8 from 9 to 2
++move 5 from 6 to 7
++move 4 from 9 to 1
++move 4 from 8 to 9
++move 12 from 9 to 1
++move 16 from 1 to 4
++move 12 from 6 to 2
++move 3 from 7 to 6
++move 3 from 7 to 3
++move 1 from 9 to 4
++move 12 from 4 to 5
++move 2 from 4 to 3
++move 1 from 7 to 1
++move 4 from 4 to 3
++move 1 from 8 to 2
++move 6 from 3 to 1
++move 1 from 1 to 8
++move 7 from 2 to 5
++move 1 from 8 to 1
++move 4 from 5 to 4
++move 5 from 5 to 9
++move 1 from 3 to 8
++move 1 from 9 to 7
++move 1 from 8 to 1
++move 4 from 5 to 6
++move 5 from 5 to 9
++move 7 from 9 to 5
++move 11 from 6 to 4
++move 1 from 9 to 4
++move 1 from 9 to 1
++move 1 from 7 to 2
++move 9 from 4 to 3
++move 5 from 1 to 9
++move 3 from 5 to 1
++move 5 from 9 to 8
++move 8 from 3 to 1
++move 2 from 5 to 3
++move 7 from 2 to 5
++move 1 from 6 to 4
++move 3 from 5 to 9
++move 3 from 6 to 9
++move 3 from 2 to 9
++move 5 from 3 to 6
++move 1 from 9 to 5
++move 4 from 8 to 3
++move 1 from 8 to 4
++move 8 from 1 to 3
++move 12 from 3 to 7
++move 1 from 2 to 4
++move 3 from 2 to 8
++move 6 from 7 to 6
++move 4 from 5 to 7
++move 5 from 9 to 7
++move 2 from 9 to 2
++move 1 from 9 to 5
++move 4 from 5 to 1
++move 1 from 5 to 4
++move 14 from 7 to 6
++move 1 from 1 to 7
++move 10 from 4 to 5
++move 4 from 1 to 2
++move 1 from 4 to 6
++move 1 from 7 to 4
++move 17 from 6 to 8
++move 1 from 5 to 7
++move 10 from 5 to 4
++move 1 from 2 to 6
++move 4 from 2 to 6
++move 13 from 6 to 1
++move 9 from 4 to 3
++move 2 from 2 to 4
++move 1 from 6 to 7
++move 1 from 4 to 3
++move 8 from 3 to 5
++move 1 from 3 to 4
++move 17 from 1 to 3
++move 15 from 3 to 7
++move 3 from 4 to 1
++move 6 from 8 to 9
++move 6 from 9 to 1
++move 2 from 3 to 1
++move 2 from 5 to 2
++move 6 from 7 to 6
++move 3 from 6 to 9
+diff --git a/main.cpp b/main.cpp
+index 6ff82dd..a56bd62 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -1,11 +1,154 @@
+ #include "day5.h"
++#include <algorithm>
++#include <iostream>
++#include <stack>
++#include <string>
++#include <vector>
++
++struct step
++{
++	int move;
++	int from;
++	int to;
++};
++
++std::vector<char> readStack(std::string str);
++step fillProcecureStep(const std::string &str);
++void vprint(const std::vector<char> &v);
++void sprint(const step &s);
++std::vector<std::string> split(const std::string &str, const std::string &delim);
++std::vector<std::stack<char>> populateStack(std::vector<std::vector<char>> &data);
++void printTops(const std::vector<std::stack<char>> &data);
++
+ 
+ int main(int argc, char *argv[])
+ {
+ 	std::fstream input("../input", std::ios::in);
+-	std::string line;while (std::getline(input, line)) {
++	std::string line;
++	bool stackEnded = false;
++	std::vector<std::vector<char>> preProcessed;
++	std::vector<std::stack<char>> data;
++	std::vector<step> procedure;
++
++	while (std::getline(input, line)) {
++		if (!stackEnded && line.find('[') == std::string::npos) {
++			stackEnded = true;
++			std::getline(input, line);
++			continue;
++		}
++		if (!stackEnded) {
++			preProcessed.push_back(readStack(line));
++		} else {
++			procedure.push_back(fillProcecureStep(line));
++			// sprint(procedure.back());
++		}
+ 	}
+-	std::cout << "Hello World!\n";
++	std::cout << "preprocessed" << std::endl;
++	// for(auto var : preProcessed) {
++	// 	vprint(var);
++	// 	std::cout << std::endl;
++	// }
++	std::cout << std::endl;
++	std::cout << "populating stack" << std::endl;
++	data = std::move(populateStack(preProcessed));
++
++	std::cout << "executing procedures" << std::endl;
++	std::cout << "Initial tops" << std::endl;
++	// printTops(data);
++	// std::cout << std::endl;
++	for(auto proc : procedure) {
++		// printTops(data);
++		for (size_t i = 0; i < proc.move; i++) {
++			data[proc.to-1].push(data[proc.from-1].top());
++			data[proc.from-1].pop();
++		}
++	}
++
++	for(auto var : data) {
++		std::cout << var.top();
++	}
++	std::cout << std::endl;
++
+ 	return 0;
+ }
+ 
++std::vector<char> readStack(std::string str)
++{
++	std::vector<char> out((str.size()+1)/4);
++	for (size_t i = 0; i < str.size(); i++) {
++		if (str[i] == '[') {
++			out[i/4] = str[i+1];
++			i++;
++		}
++	}
++	return out;
++}
++
++void vprint(const std::vector<char> &v)
++{
++	for(auto var : v) {
++		if (var == 0) {
++			std::cout << 0;
++		}
++		else {
++			std::cout << var;
++		}
++		std::cout << " ";
++	}
++	std::cout << std::endl;
++}
++
++step fillProcecureStep(const std::string &str)
++{
++	step s;
++	auto splited = split(str, " ");
++	s.move = std::stoi(splited[1]);
++	s.from = std::stoi(splited[3]);
++	s.to = std::stoi(splited[5]);
++	return s;
++}
++
++void sprint(const step &s)
++{
++	std::cout << "move: " << s.move << " from: " << s.from << " to: " << s.to << std::endl;
++}
++
++std::vector<std::string> split(const std::string &str, const std::string &delim)
++{
++	size_t pos_start = 0, pos_end, delim_len = delim.length();
++	std::string token;
++	std::vector<std::string> res;
++
++	while ((pos_end = str.find (delim, pos_start)) != std::string::npos) {
++		token = str.substr (pos_start, pos_end - pos_start);
++		pos_start = pos_end + delim_len;
++		res.push_back (token);
++	}
++
++	res.push_back(str.substr (pos_start));
++	return res;
++}
++
++std::vector<std::stack<char>> populateStack(std::vector<std::vector<char>> &data)
++{
++	std::vector<std::stack<char>> out(data[0].size());
++	for (auto i = data.crbegin(); i != data.crend(); i++) {
++		for (auto j = 0; j < i->size(); j++) {
++			if (i->at(j) != 0) {
++				out[j].push(i->at(j));
++			}
++		}
++	}
++	return out;
++}
++
++void printTops(const std::vector<std::stack<char>> &data)
++{
++	for(auto s : data) {
++		if (!s.empty()) {
++			std::cout << s.top() << " ";
++		}
++	}
++	std::cout << std::endl;
++}
++
+diff --git a/src/day5.h b/src/day5.h
+index 11d66b1..5f3f664 100644
+--- a/src/day5.h
++++ b/src/day5.h
+@@ -6,6 +6,8 @@
+ #include <iterator>
+ #include <numeric>
+ #include <vector>
++#include <map>
++#include <stack>
+ 
+ class day5
+ {
+diff --git a/test b/test
+new file mode 100644
+index 0000000..84933bb
+--- /dev/null
++++ b/test
+@@ -0,0 +1,9 @@
++    [D]    
++[N] [C]    
++[Z] [M] [P]
++ 1   2   3 
++
++move 1 from 2 to 1
++move 3 from 1 to 3
++move 2 from 2 to 1
++move 1 from 1 to 2
+-- 
+2.34.1
+
