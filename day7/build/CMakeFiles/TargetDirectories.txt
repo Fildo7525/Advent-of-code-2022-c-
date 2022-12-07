@@ -1,0 +1,6 @@
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/CMakeFiles/day7.dir
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/CMakeFiles/edit_cache.dir
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/CMakeFiles/rebuild_cache.dir
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/src/CMakeFiles/lib.dir
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/src/CMakeFiles/edit_cache.dir
+/home/fildo7525/Desktop/Cpp/AOC22/day7/build/src/CMakeFiles/rebuild_cache.dir
