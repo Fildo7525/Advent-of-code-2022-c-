@@ -9,14 +9,18 @@
 std::shared_ptr<day7> loadTree();
 void calculateSizes(std::shared_ptr<day7> tree);
 long pt1(std::shared_ptr<day7> node);
+long pt2(long neededSize);
 
 long totalSize = 0;
+std::vector<long> sizes;
 
 int main(int argc, char *argv[])
 {
 	auto tree = loadTree();
 	calculateSizes(tree);
 	// pt1(tree);
+	std::cout << "Root size: " << tree->m_size << std::endl;
+	std::cout << "Needed" << pt2(30'000'000 - (70'000'000 - tree->m_size)) << std::endl;
 	return 0;
 }
 
@@ -79,6 +83,7 @@ void calculateSizes(std::shared_ptr<day7> tree)
 	for(auto node : tree->m_nodes) {
 		calculateSizes(node);
 		tree->m_size += node->m_size;
+		sizes.push_back(node->m_size);
 	}
 }
 
@@ -93,6 +98,13 @@ long pt1(std::shared_ptr<day7> node)
 	return totalSize;
 }
 
+long pt2(long neededSize)
+{
+	std::sort(sizes.begin(), sizes.end());
+	for(auto var : sizes) {
+		if (var >= neededSize) {
+			return var;
+		}
 	}
 }
 
