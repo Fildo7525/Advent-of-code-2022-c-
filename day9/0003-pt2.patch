@@ -1,0 +1,179 @@
+From 42a0cb0f099636e1b93ea12d8e18165fc4e34e5c Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Fri, 9 Dec 2022 20:32:30 +0100
+Subject: [PATCH 3/3] pt2
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ main.cpp     | 13 +++++++++++--
+ src/day9.cpp | 51 +++++++++++++++++++++++++++++++++------------------
+ src/day9.h   | 13 +++++++------
+ test2        |  8 ++++++++
+ 4 files changed, 59 insertions(+), 26 deletions(-)
+ create mode 100644 test2
+
+diff --git a/main.cpp b/main.cpp
+index e2b62bd..a4fbc89 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -12,24 +12,33 @@ int main(int argc, char *argv[])
+ 	while (std::getline(input, line)) {
+ 		char letter = line[0];
+ 		int fields = std::stoi(line.substr(1));
+-		std::function<void()> move;
++		std::function<void(Position&, Position&)> move;
++		std::function<void()> headMove;
+ 		switch (letter) {
+ 			case 'R':
+ 				move = moveHeadRight;
++				headMove = [&] { rope[0].second++; };
+ 				break;
+ 			case 'L':
+ 				move = moveHeadLeft;
++				headMove = [&] { rope[0].second--; };
+ 				break;
+ 			case 'U':
+ 				move = moveHeadUp;
++				headMove = [&] { rope[0].first--; };
+ 				break;
+ 			case 'D':
+ 				move = moveHeadDown;
++				headMove = [&] { rope[0].first++; };
+ 				break;
+ 		}
+ 		for (size_t i = 0; i < fields; i++) {
+ 			// std::cout << "TAIL: x: " << tail.first << " y: " << tail.second << std::endl;
+-			move();
++			headMove();
++			for (size_t j = 1; j < rope.size(); j++) {
++				step(rope[j-1], rope[j]);
++			}
++			positions.insert(rope[9]);
+ 		}
+ 	}
+ 	// std::vector<std::string> table;
+diff --git a/src/day9.cpp b/src/day9.cpp
+index 4be9f68..4fdcb98 100644
+--- a/src/day9.cpp
++++ b/src/day9.cpp
+@@ -1,46 +1,61 @@
+ #include "day9.h"
++#include <vector>
+ 
+-Position head{0,0};
+-Position tail{head};
++std::vector<Position> rope(10);
++Position& realTail = rope[9];
+ std::set<Position> positions;
+ 
+-void moveHeadRight()
++void moveHeadRight(Position &head, Position &tail)
+ {
+-	head.second++;
+-	if (std::abs(head.second - tail.second) > 1) {
++	if (std::abs(head.first - tail.first) > 1
++	|| std::abs(head.second - tail.second) > 1) {
+ 		tail = head;
+ 		tail.second--;
+ 	}
+-	positions.insert(tail);
++	positions.insert(realTail);
+ }
+ 
+-void moveHeadLeft()
++void moveHeadLeft(Position &head, Position &tail)
+ {
+-	head.second--;
+-	if (std::abs(head.second - tail.second) > 1) {
++	if (std::abs(head.first - tail.first) > 1
++	|| std::abs(head.second - tail.second) > 1) {
+ 		tail = head;
+ 		tail.second++;
+ 	}
+-	positions.insert(tail);
++	positions.insert(realTail);
+ }
+ 
+-void moveHeadDown()
++void moveHeadDown(Position &head, Position &tail)
+ {
+-	head.first++;
+-	if (std::abs(head.first - tail.first) > 1) {
++	if (std::abs(head.first - tail.first) > 1
++	|| std::abs(head.second - tail.second) > 1) {
+ 		tail = head;
+ 		tail.first--;
+ 	}
+-	positions.insert(tail);
++	positions.insert(realTail);
+ }
+ 
+-void moveHeadUp()
++void moveHeadUp(Position &head, Position &tail)
+ {
+-	head.first--;
+-	if (std::abs(head.first - tail.first) > 1) {
++	if (std::abs(head.first - tail.first) > 1
++	|| std::abs(head.second - tail.second) > 1) {
+ 		tail = head;
+ 		tail.first++;
+ 	}
+-	positions.insert(tail);
++	positions.insert(realTail);
++}
++
++void step(Position &head, Position &tail)
++{
++	if (std::abs(head.first - tail.first) >= 2) {
++		tail.first += (head.first - tail.first) / 2;
++		if (std::abs(head.second - tail.second) >= 2)
++			tail.second += (head.second - tail.second) / 2;
++		else
++			tail.second += head.second - tail.second;
++	} else if (std::abs(head.second - tail.second) >= 2) {
++		tail.second += (head.second - tail.second) / 2;
++		tail.first += head.first - tail.first;
++	}
+ }
+ 
+diff --git a/src/day9.h b/src/day9.h
+index b6d01c3..e2c1eaf 100644
+--- a/src/day9.h
++++ b/src/day9.h
+@@ -10,12 +10,13 @@
+ 
+ using Position = std::pair<int, int>;
+ 
+-extern Position head;
+-extern Position tail;
++extern Position &realTail;
++extern std::vector<Position> rope;
+ extern std::set<Position> positions ;
+ 
+-void moveHeadRight();
+-void moveHeadLeft();
+-void moveHeadDown();
+-void moveHeadUp();
++void moveHeadRight(Position &head, Position &tail);
++void moveHeadLeft(Position &head, Position &tail);
++void moveHeadDown(Position &head, Position &tail);
++void moveHeadUp(Position &head, Position &tail);
++void step(Position &head, Position &tail);
+ 
+diff --git a/test2 b/test2
+new file mode 100644
+index 0000000..60bd43b
+--- /dev/null
++++ b/test2
+@@ -0,0 +1,8 @@
++R 5
++U 8
++L 8
++D 3
++R 17
++D 10
++L 25
++U 20
+-- 
+2.34.1
+

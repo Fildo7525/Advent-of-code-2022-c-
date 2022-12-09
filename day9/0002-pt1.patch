@@ -1,0 +1,160 @@
+From da8fc407d0911ca34c7017cb51142e8db89f187d Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Fri, 9 Dec 2022 18:33:55 +0100
+Subject: [PATCH 2/3] pt1
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ CMakeLists.txt |  1 +
+ main.cpp       | 39 ++++++++++++++++++++++++++++++++++++++-
+ src/day9.cpp   | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ src/day9.h     | 15 ++++++++++-----
+ 4 files changed, 93 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e0125cd..a29993a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,6 +4,7 @@ project(day9 VERSION 3.22.1)
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++set(CMAKE_BUILD_TYPE Debug)
+ 
+ set(SOURCES
+ 	main.cpp
+diff --git a/main.cpp b/main.cpp
+index 20b9886..e2b62bd 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -1,12 +1,49 @@
+ #include "day9.h"
++#include <functional>
++#include <string>
++#include <vector>
++
++// low 2822
+ 
+ int main(int argc, char *argv[])
+ {
+ 	std::fstream input("../input", std::ios::in);
+ 	std::string line;
+ 	while (std::getline(input, line)) {
++		char letter = line[0];
++		int fields = std::stoi(line.substr(1));
++		std::function<void()> move;
++		switch (letter) {
++			case 'R':
++				move = moveHeadRight;
++				break;
++			case 'L':
++				move = moveHeadLeft;
++				break;
++			case 'U':
++				move = moveHeadUp;
++				break;
++			case 'D':
++				move = moveHeadDown;
++				break;
++		}
++		for (size_t i = 0; i < fields; i++) {
++			// std::cout << "TAIL: x: " << tail.first << " y: " << tail.second << std::endl;
++			move();
++		}
+ 	}
+-	std::cout << "Hello World!\n";
++	// std::vector<std::string> table;
++	// for (size_t i = 0; i < 6; i++) {
++	// 	table.push_back(std::string(6, '.'));
++	// }
++	//
++	// for(auto var : positions) {
++	// 	// std::cout << "x: " << var.first << " y: " << var.second << std::endl;
++	// 	table[5+var.first][6-var.second] = '#';
++	// }
++
++	// std::copy(table.begin(), table.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
++	std::cout << "Number of visited fields: " << positions.size() << std::endl;
+ 	return 0;
+ }
+ 
+diff --git a/src/day9.cpp b/src/day9.cpp
+index f7295a6..4be9f68 100644
+--- a/src/day9.cpp
++++ b/src/day9.cpp
+@@ -1,2 +1,46 @@
+ #include "day9.h"
+ 
++Position head{0,0};
++Position tail{head};
++std::set<Position> positions;
++
++void moveHeadRight()
++{
++	head.second++;
++	if (std::abs(head.second - tail.second) > 1) {
++		tail = head;
++		tail.second--;
++	}
++	positions.insert(tail);
++}
++
++void moveHeadLeft()
++{
++	head.second--;
++	if (std::abs(head.second - tail.second) > 1) {
++		tail = head;
++		tail.second++;
++	}
++	positions.insert(tail);
++}
++
++void moveHeadDown()
++{
++	head.first++;
++	if (std::abs(head.first - tail.first) > 1) {
++		tail = head;
++		tail.first--;
++	}
++	positions.insert(tail);
++}
++
++void moveHeadUp()
++{
++	head.first--;
++	if (std::abs(head.first - tail.first) > 1) {
++		tail = head;
++		tail.first++;
++	}
++	positions.insert(tail);
++}
++
+diff --git a/src/day9.h b/src/day9.h
+index 4bc909e..b6d01c3 100644
+--- a/src/day9.h
++++ b/src/day9.h
+@@ -6,11 +6,16 @@
+ #include <iterator>
+ #include <numeric>
+ #include <vector>
++#include <set>
+ 
+-class day9
+-{
+-public:
+-	day9() = default;
++using Position = std::pair<int, int>;
+ 
+-};
++extern Position head;
++extern Position tail;
++extern std::set<Position> positions ;
++
++void moveHeadRight();
++void moveHeadLeft();
++void moveHeadDown();
++void moveHeadUp();
+ 
+-- 
+2.34.1
+
