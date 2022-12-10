@@ -1,0 +1,78 @@
+From 6ff48903672d4046b042c8d5743b203a419c79d7 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Sat, 10 Dec 2022 09:26:02 +0100
+Subject: [PATCH 2/2] pt2
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ main.cpp | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/main.cpp b/main.cpp
+index 940b9e4..ecda1c6 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -1,44 +1,44 @@
+ #include "day10.h"
++#include <algorithm>
+ #include <iostream>
++#include <iterator>
+ 
+-long sumOfSignalStrengths = 0;
+-short readings = 0;
++std::vector<std::string> screen;
+ 
+-void checkCycle(int cycle, long sygnal);
++void checkCycle(int cycle, long spritePos);
+ 
+ int main(int argc, char *argv[])
+ {
++	for (size_t i = 0; i < 6; i++) {
++		screen.push_back(std::string(40, '.'));
++	}
++
+ 	std::fstream input("../input", std::ios::in);
+ 	std::string line;
+-	long signalStrength = 1;
++	long spritePosition = 1;
+ 	int cycle = 0;
+ 
+ 	while (std::getline(input, line)) {
+ 		cycle++;
+-		checkCycle(cycle, signalStrength);
++		checkCycle(cycle, spritePosition);
+ 		auto data = split(line, " ");
+ 		if (data[0] == "addx") {
+ 			int modificiation = std::stoi(data[1]);
+ 			cycle++;
+-			checkCycle(cycle, signalStrength);
+-			if (readings == 6) {
+-				std::cout << "Sum: " << sumOfSignalStrengths << std::endl;
+-				break;
+-			}
+-			signalStrength += modificiation;
++			checkCycle(cycle, spritePosition);
+ 		}
+ 		// noop continues
+ 	}
++	std::copy(screen.cbegin(), screen.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
+ 
+ 	return 0;
+ }
+ 
+-void checkCycle(int cycle, long signal)
++void checkCycle(int cycle, long spritePosition)
+ {
+-	if ((cycle - 20) % 40 == 0) {
+-		readings++;
+-		auto tmp = cycle * signal;
+-		sumOfSignalStrengths += tmp;
++	cycle--;
++	if (spritePosition == cycle%40 || spritePosition == (cycle%40) - 1 || spritePosition == (cycle%40)+1) {
++		screen[cycle/40][cycle%40] = '#';
+ 	}
+ }
+ 
+-- 
+2.34.1
+

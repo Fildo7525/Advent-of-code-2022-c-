@@ -1,0 +1,374 @@
+From 77c0dc2dda1c0c5333b812672c3c6b437f16a3e5 Mon Sep 17 00:00:00 2001
+From: Filip Lobpreis <f.lobpreis@gmail.com>
+Date: Sat, 10 Dec 2022 08:46:46 +0100
+Subject: [PATCH 1/2] pt1
+
+Signed-off-by: Filip Lobpreis <f.lobpreis@gmail.com>
+---
+ CMakeLists.txt |   1 +
+ input          | 140 +++++++++++++++++++++++++++++++++++++++++++++++
+ main.cpp       |  32 ++++++++++-
+ test           | 146 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 318 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9d1a1a3..a9aaa2b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,6 +4,7 @@ project(day10 VERSION 3.22.1)
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++set(CMAKE_BUILD_TYPE Debug)
+ 
+ set(SOURCES
+ 	main.cpp
+diff --git a/input b/input
+index e69de29..50f6b08 100644
+--- a/input
++++ b/input
+@@ -0,0 +1,140 @@
++noop
++noop
++noop
++addx 5
++noop
++addx 1
++noop
++addx 4
++addx 25
++addx -20
++noop
++noop
++addx 5
++addx 3
++noop
++addx 2
++noop
++noop
++addx -1
++addx 6
++addx 1
++noop
++addx 4
++noop
++addx -37
++noop
++noop
++noop
++addx 3
++addx 32
++addx -25
++addx 2
++addx 3
++noop
++addx 2
++addx 3
++noop
++addx 2
++addx 2
++addx -24
++addx 25
++addx 5
++addx 2
++addx 8
++addx -23
++addx 18
++addx 5
++addx -39
++addx 11
++addx -9
++addx 6
++addx -2
++addx 5
++addx 4
++addx -4
++addx 3
++addx 5
++addx 2
++noop
++addx -1
++addx 6
++addx -21
++addx 22
++addx 3
++addx 1
++addx 5
++noop
++noop
++addx -35
++noop
++noop
++noop
++noop
++addx 37
++addx -33
++noop
++addx 6
++addx 2
++addx -1
++addx 3
++addx 1
++addx 5
++addx 2
++addx -19
++addx 21
++addx 1
++addx 5
++addx -31
++addx 36
++noop
++addx 3
++addx -2
++addx -38
++noop
++noop
++addx 7
++addx 14
++addx -4
++addx -7
++addx 5
++addx 2
++addx 12
++addx -15
++addx 6
++addx 2
++addx 5
++addx -27
++addx 25
++addx 5
++noop
++addx 7
++addx -2
++addx 5
++addx -40
++noop
++addx 7
++noop
++addx -1
++addx 2
++addx 5
++addx -1
++addx 1
++addx 2
++addx 7
++noop
++addx -2
++noop
++addx 3
++addx 2
++addx 7
++noop
++noop
++addx 1
++noop
++noop
++addx 3
++addx 1
++noop
++noop
++noop
+diff --git a/main.cpp b/main.cpp
+index 3bba79c..940b9e4 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -1,14 +1,44 @@
+ #include "day10.h"
++#include <iostream>
++
++long sumOfSignalStrengths = 0;
++short readings = 0;
++
++void checkCycle(int cycle, long sygnal);
+ 
+ int main(int argc, char *argv[])
+ {
+ 	std::fstream input("../input", std::ios::in);
+ 	std::string line;
++	long signalStrength = 1;
++	int cycle = 0;
+ 
+ 	while (std::getline(input, line)) {
++		cycle++;
++		checkCycle(cycle, signalStrength);
++		auto data = split(line, " ");
++		if (data[0] == "addx") {
++			int modificiation = std::stoi(data[1]);
++			cycle++;
++			checkCycle(cycle, signalStrength);
++			if (readings == 6) {
++				std::cout << "Sum: " << sumOfSignalStrengths << std::endl;
++				break;
++			}
++			signalStrength += modificiation;
++		}
++		// noop continues
+ 	}
+ 
+-	std::cout << "Hello World!\n";
+ 	return 0;
+ }
+ 
++void checkCycle(int cycle, long signal)
++{
++	if ((cycle - 20) % 40 == 0) {
++		readings++;
++		auto tmp = cycle * signal;
++		sumOfSignalStrengths += tmp;
++	}
++}
++
+diff --git a/test b/test
+index e69de29..37ee8ee 100644
+--- a/test
++++ b/test
+@@ -0,0 +1,146 @@
++addx 15
++addx -11
++addx 6
++addx -3
++addx 5
++addx -1
++addx -8
++addx 13
++addx 4
++noop
++addx -1
++addx 5
++addx -1
++addx 5
++addx -1
++addx 5
++addx -1
++addx 5
++addx -1
++addx -35
++addx 1
++addx 24
++addx -19
++addx 1
++addx 16
++addx -11
++noop
++noop
++addx 21
++addx -15
++noop
++noop
++addx -3
++addx 9
++addx 1
++addx -3
++addx 8
++addx 1
++addx 5
++noop
++noop
++noop
++noop
++noop
++addx -36
++noop
++addx 1
++addx 7
++noop
++noop
++noop
++addx 2
++addx 6
++noop
++noop
++noop
++noop
++noop
++addx 1
++noop
++noop
++addx 7
++addx 1
++noop
++addx -13
++addx 13
++addx 7
++noop
++addx 1
++addx -33
++noop
++noop
++noop
++addx 2
++noop
++noop
++noop
++addx 8
++noop
++addx -1
++addx 2
++addx 1
++noop
++addx 17
++addx -9
++addx 1
++addx 1
++addx -3
++addx 11
++noop
++noop
++addx 1
++noop
++addx 1
++noop
++noop
++addx -13
++addx -19
++addx 1
++addx 3
++addx 26
++addx -30
++addx 12
++addx -1
++addx 3
++addx 1
++noop
++noop
++noop
++addx -9
++addx 18
++addx 1
++addx 2
++noop
++noop
++addx 9
++noop
++noop
++noop
++addx -1
++addx 2
++addx -37
++addx 1
++addx 3
++noop
++addx 15
++addx -21
++addx 22
++addx -6
++addx 1
++noop
++addx 2
++addx 1
++noop
++addx -10
++noop
++noop
++addx 20
++addx 1
++addx 2
++addx 2
++addx -6
++addx -11
++noop
++noop
++noop
+-- 
+2.34.1
+
